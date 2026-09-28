@@ -112,8 +112,34 @@
   .header h2 .konoha-leaf { color: var(--naruto-orange); }
   .shuriken { display:inline-block; width:30px; height:30px; vertical-align:-6px; flex:0 0 auto;
     filter:drop-shadow(0 0 5px rgba(200,210,225,.45));
-    animation:shurikenSpin 2.2s linear infinite; transform-origin:center; }
+    animation:shurikenSpin 7s linear infinite; transform-origin:center; }
   @keyframes shurikenSpin { to { transform:rotate(360deg); } }
+  /* Slow drifting leaves + faint wind streaks across the header (ambient, behind text) */
+  .header > .title-leaf, .header > .wind-streak { position:absolute; z-index:0; }
+  .title-leaf { width:11px; height:11px; left:0; top:18%; opacity:0; pointer-events:none;
+    background:linear-gradient(135deg,#8ee36f 0%,#3fa34d 60%,#2b7a38 100%);
+    border-radius:1px 80% 1px 80%;
+    animation:leafDrift 12s linear infinite; }
+  .title-leaf.l2 { top:60%; width:8px; height:8px; animation-delay:4s; }
+  .title-leaf.l3 { top:38%; width:13px; height:13px; animation-delay:8s; }
+  @keyframes leafDrift {
+    0% { transform:translate(-30px, 12px) rotate(0deg); opacity:0; }
+    8% { opacity:.85; }
+    30% { transform:translate(28vw, -12px) rotate(150deg); }
+    55% { transform:translate(56vw, 8px) rotate(240deg); opacity:.8; }
+    80% { transform:translate(82vw, -10px) rotate(330deg); opacity:.55; }
+    100% { transform:translate(106vw, 6px) rotate(430deg); opacity:0; } }
+  .wind-streak { left:0; top:30%; height:2px; width:90px; opacity:0; pointer-events:none; border-radius:2px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+    filter:blur(.5px); animation:windDrift 14s linear infinite; }
+  .wind-streak.w1 { top:30%; animation-delay:2.5s; }
+  .wind-streak.w2 { top:68%; width:130px; animation-delay:9s; }
+  @keyframes windDrift {
+    0% { transform:translateX(-150px); opacity:0; }
+    10% { opacity:.45; }
+    85% { opacity:.35; }
+    100% { transform:translateX(106vw); opacity:0; } }
+  body.sage .wind-streak { background:linear-gradient(90deg, transparent, rgba(120,80,40,.35), transparent); }
   .header-actions { display: flex; gap: 8px; row-gap: 8px; align-items: center; flex-wrap: wrap; }
   .konoha-badge { background: linear-gradient(180deg, #f4f6f9 0%, #ccd3dc 48%, #a7b0bc 52%, #c3cad4 100%); color: #22262e; padding: 5px 12px; border-radius: 8px; font-weight: 900; font-size: 11px; text-transform: uppercase; border: 1px solid #6d7683; box-shadow: inset 0 1px 0 rgba(255,255,255,.8), inset 0 -1px 0 rgba(0,0,0,.25), 0 2px 6px rgba(0,0,0,.45); text-shadow: 0 1px 0 rgba(255,255,255,.6); white-space: nowrap; }
   .settings-btn { background: #0b0c10; border: 1px solid var(--scroll-border); color: var(--text-bright); padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; cursor: pointer; text-transform: uppercase; white-space: nowrap; }
@@ -228,7 +254,7 @@
   .chibi-deidara .ch-mouth { transform: translateX(-50%) rotate(-14deg); border-radius: 3px 9px 11px 3px; }
   .chibi-sm { scale: 0.6; margin: -14px -12px; vertical-align: middle; display: inline-block; }
   .manga-avatar.chibi-holder { background: transparent; border: none; animation: none; width: 64px; height: 74px; }
-  @media (prefers-reduced-motion: reduce) { .chibi, .chibi::after, .arena-card::before, .arena-card::after, .tile-pop, .shuriken, .hp-you.chakra-surge, .hp-you.chakra-surge::after { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .chibi, .chibi::after, .arena-card::before, .arena-card::after, .tile-pop, .shuriken, .title-leaf, .wind-streak, .hp-you.chakra-surge, .hp-you.chakra-surge::after { animation: none; } }
   /* Mobile scroll smoothness: single page scroller (no nested scroll traps),
      momentum scrolling, and cheaper off-screen paint on phones. */
   html, body { -webkit-overflow-scrolling: touch; touch-action: pan-y; }
@@ -524,6 +550,21 @@
   .rankup-title { font-size: 52px; color: var(--naruto-orange); margin: 8px 0 4px; text-shadow: 0 0 20px rgba(255,107,0,0.5); }
   .rankup-sub { font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 20px; line-height: 1.5; }
 </style>
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0b0c10">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Shinobi Shred">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+      });
+    }
+  </script>
 </head>
 <body>
 
@@ -558,40 +599,40 @@
 
     <div class="form-group">
       <label id="labelCurrentWt">Starting Weight (kg)</label>
-      <input type="number" id="calcWeight" step="0.1" value="107.0">
+      <input type="number" id="calcWeight" step="0.1" placeholder="e.g. 95.0">
       <div class="field-hint">🍥 This becomes the first point on your weight graph — your "day one".</div>
     </div>
     <div class="form-group">
       <label id="labelTargetWt">Target Goal Weight (kg)</label>
-      <input type="number" id="calcTargetWeight" step="0.1" value="88.0">
+      <input type="number" id="calcTargetWeight" step="0.1" placeholder="e.g. 80.0">
     </div>
     <div class="form-group">
       <label>🥋 Start Date</label>
-      <input type="date" id="calcStartDate" value="2026-09-01">
+      <input type="date" id="calcStartDate">
       <div class="field-hint">📅 Your weeks and weekly targets will be laid out from this day to your target date.</div>
     </div>
     <div class="form-group">
       <label>🎯 Target Date (deadline)</label>
-      <input type="date" id="calcTargetDate" value="2026-12-01">
+      <input type="date" id="calcTargetDate">
       <div class="field-hint">📅 Your weeks and weekly targets will be laid out from your start date to this day.</div>
     </div>
 
     <!-- Height Dynamic Input Container -->
     <div class="form-group" id="heightMetricGroup">
       <label>Height (cm)</label>
-      <input type="number" id="calcHeightCm" value="178">
+      <input type="number" id="calcHeightCm" placeholder="e.g. 175">
     </div>
     <div class="form-group" id="heightImperialGroup" style="display: none;">
       <label>Height (Feet & Inches)</label>
       <div class="height-row">
-        <input type="number" id="calcHeightFt" placeholder="Feet" value="5">
-        <input type="number" id="calcHeightIn" placeholder="Inches" value="10">
+        <input type="number" id="calcHeightFt" placeholder="Feet">
+        <input type="number" id="calcHeightIn" placeholder="Inches">
       </div>
     </div>
 
     <div class="form-group">
       <label>Shinobi Age (Years)</label>
-      <input type="number" id="calcAge" value="32">
+      <input type="number" id="calcAge" placeholder="e.g. 30">
     </div>
     <div class="form-group">
       <label>Ninja Academy Lineage</label>
@@ -716,6 +757,11 @@
   <!-- Header -->
   <div class="header">
     <h2 class="display-font"><span id="headerChibi" class="chibi-sm"><div class="chibi chibi-naruto"><div class="ch-hair"></div><div class="ch-head"><div class="ch-band"><i>🍃</i></div><div class="ch-eye l"></div><div class="ch-eye r"></div><div class="ch-blush l"></div><div class="ch-blush r"></div><div class="ch-mouth"></div><div class="ch-brow l"></div><div class="ch-brow r"></div></div><div class="ch-body"></div></div></span><span class="konoha-leaf"><svg class="shuriken" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="shSteel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7fafc"/><stop offset=".45" stop-color="#aeb8c4"/><stop offset="1" stop-color="#78818d"/></linearGradient><mask id="shHole"><rect width="100" height="100" fill="#fff"/><circle cx="50" cy="50" r="11" fill="#000"/></mask></defs><g mask="url(#shHole)" fill="url(#shSteel)" stroke="#454e59" stroke-width="3"><path d="M50 50 C45 34 44 22 50 8 C56 22 55 34 50 50 Z"/><path d="M50 50 C66 45 78 44 92 50 C78 56 66 55 50 50 Z"/><path d="M50 50 C55 66 56 78 50 92 C44 78 45 66 50 50 Z"/><path d="M50 50 C34 55 22 56 8 50 C22 44 34 45 50 50 Z"/></g></svg></span> <span class="title-fire">Shinobi Shred</span></h2>
+    <span class="title-leaf l1" aria-hidden="true"></span>
+    <span class="title-leaf l2" aria-hidden="true"></span>
+    <span class="title-leaf l3" aria-hidden="true"></span>
+    <span class="wind-streak w1" aria-hidden="true"></span>
+    <span class="wind-streak w2" aria-hidden="true"></span>
     <div class="header-actions">
       <button class="profile-chip" id="profileChip" onclick="openProfileModal()" title="Shinobi profiles — tap to switch">
         <span id="profileChipChibi" class="chibi-xs"></span>
@@ -932,7 +978,7 @@
 
   <button class="save-btn" id="saveBtn" onclick="saveProgress()">📜 File Mission Report</button>
   <input type="file" id="importFile" accept=".json,application/json" class="file-hidden" onchange="importBackup(this)">
-  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r11 · Crafted by Adithya 🍥</div>
+  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r13 · Crafted by Adithya 🍥</div>
 </div>
 
 <script>
@@ -963,6 +1009,9 @@
   function pGet(k) { return localStorage.getItem(pk(k)); }
   function pSet(k, v) { localStorage.setItem(pk(k), v); }
   function pDel(k) { localStorage.removeItem(pk(k)); }
+  // BLANK-FIRST ENROLLMENT: true once this profile has sealed a program.
+  // Fresh shinobi see blank inputs; re-enrolling shinobi get their own stats back.
+  function hasProgram() { try { return !!pGet('shinobi_config'); } catch (e) { return false; } }
 
   const SHINOBI_ROSTER = [
     { id: 'naruto',     name: 'Naruto',         village: '🍃 Leaf',      accent: '#ff6b00', symbol: '🍃' },
@@ -1545,16 +1594,22 @@
     if (unit === 'imperial') {
       document.getElementById('labelCurrentWt').innerText = "Starting Weight (lbs)";
       document.getElementById('labelTargetWt').innerText = "Target Goal Weight (lbs)";
-      curWeightInput.value = (startWeightKg * 2.20462).toFixed(1);
-      targetWeightInput.value = (finalGoalWeightKg * 2.20462).toFixed(1);
+      // BLANK-FIRST: only echo saved stats when a program exists (re-enrollment).
+      // Fresh shinobi keep blank inputs — and anything they already typed stays.
+      if (hasProgram()) {
+        curWeightInput.value = (startWeightKg * 2.20462).toFixed(1);
+        targetWeightInput.value = (finalGoalWeightKg * 2.20462).toFixed(1);
+      }
 
       document.getElementById('heightMetricGroup').style.display = 'none';
       document.getElementById('heightImperialGroup').style.display = 'block';
     } else {
       document.getElementById('labelCurrentWt').innerText = "Starting Weight (kg)";
       document.getElementById('labelTargetWt').innerText = "Target Goal Weight (kg)";
-      curWeightInput.value = startWeightKg.toFixed(1);
-      targetWeightInput.value = finalGoalWeightKg.toFixed(1);
+      if (hasProgram()) {
+        curWeightInput.value = startWeightKg.toFixed(1);
+        targetWeightInput.value = finalGoalWeightKg.toFixed(1);
+      }
 
       document.getElementById('heightMetricGroup').style.display = 'block';
       document.getElementById('heightImperialGroup').style.display = 'none';
@@ -1587,10 +1642,31 @@
   function openSetupModal() {
     clearEnrollError();
     setUnitSystem(currentUnit);
+    // BLANK-FIRST ENROLLMENT: fresh shinobi get blank inputs. Re-enrolling
+    // shinobi get their own saved stats back — never anyone else's numbers.
+    const returning = hasProgram();
+    const setV = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
     const dt = document.getElementById('calcTargetDate');
-    if (dt) dt.value = targetDateStr || isoPlusDays(startDateStr, 91);
+    if (dt) dt.value = returning ? (targetDateStr || '') : '';
     const sd = document.getElementById('calcStartDate');
-    if (sd) sd.value = startDateStr || '2026-09-01';
+    if (sd) sd.value = returning ? (startDateStr || '') : '';
+    if (returning) {
+      if (currentUnit === 'imperial') {
+        const totalIn = heightCm / 2.54;
+        setV('calcHeightFt', Math.floor(totalIn / 12));
+        setV('calcHeightIn', Math.round(totalIn % 12));
+      } else {
+        setV('calcHeightCm', Math.round(heightCm));
+      }
+      setV('calcAge', ageYears || '');
+      setV('calcNindo', nindo || '');
+      const sx = document.getElementById('calcSex'); if (sx) sx.value = sexType || 'male';
+      const ac = document.getElementById('calcActivity'); if (ac) ac.value = String(activityLevel || 1.55);
+    } else {
+      ['calcWeight', 'calcTargetWeight', 'calcHeightCm', 'calcHeightFt', 'calcHeightIn', 'calcAge', 'calcNindo'].forEach(id => setV(id, ''));
+      const sx = document.getElementById('calcSex'); if (sx) sx.value = 'male';
+      const ac = document.getElementById('calcActivity'); if (ac) ac.value = '1.55';
+    }
     // PROFILES: prefill identity from the active shinobi
     const me = getActiveProfile();
     const nn = document.getElementById('calcNinjaName');
@@ -1632,10 +1708,18 @@
   // NEW: the dry evaluation report is gone — Iruka now gives a live graduation
   // prophecy instead. Still updates on every keystroke, still uses the inputs.
   function runLiveCoachPreview() {
-    let wInput = parseFloat(document.getElementById('calcWeight').value) || 107;
-    let tInput = parseFloat(document.getElementById('calcTargetWeight').value) || 88;
-    let weightKg = (currentUnit === 'imperial') ? wInput / 2.20462 : wInput;
-    let targetKg = (currentUnit === 'imperial') ? tInput / 2.20462 : tInput;
+    // BLANK-FIRST: with no numbers typed yet, show the invitation — never a
+    // phantom prophecy built from someone else's stats.
+    const wRaw = parseFloat(document.getElementById('calcWeight').value);
+    const tRaw = parseFloat(document.getElementById('calcTargetWeight').value);
+    const box = document.getElementById('prophecyBox');
+    if (!box) return;
+    if (!(wRaw > 0) || !(tRaw > 0)) {
+      box.innerHTML = `🔮 <strong>Iruka's Graduation Prophecy:</strong> Enter your stats above and the crystal ball will reveal your trial!`;
+      return;
+    }
+    let weightKg = (currentUnit === 'imperial') ? wRaw / 2.20462 : wRaw;
+    let targetKg = (currentUnit === 'imperial') ? tRaw / 2.20462 : tRaw;
 
     const toLose = weightKg - targetKg;
     const perWeek = 600 * 7 / 7700; // ~0.55 kg/week at the prescribed deficit
@@ -1668,8 +1752,6 @@
       'The Hokage monument is saving you a spot.'
     ];
     const line = flavor[Math.floor(Math.random() * flavor.length)];
-    const box = document.getElementById('prophecyBox');
-    if (!box) return;
     box.innerHTML = toLose <= 0
       ? `🔮 <strong>Iruka's Graduation Prophecy:</strong><br>Hmm... the crystal ball is cloudy. Set a target below your current weight, shinobi!`
       : `🔮 <strong>Iruka's Graduation Prophecy:</strong><br>` +
@@ -1686,21 +1768,23 @@
   });
 
   function calculateAndSaveProtocol() {
-    let wInput = parseFloat(document.getElementById('calcWeight').value) || 107.0;
-    let tInput = parseFloat(document.getElementById('calcTargetWeight').value) || 88.0;
+    // BLANK-FIRST: every stat is required. No silent fallbacks to demo numbers.
+    const wIn = parseFloat(document.getElementById('calcWeight').value);
+    const tIn = parseFloat(document.getElementById('calcTargetWeight').value);
+    if (!(wIn > 0)) { showEnrollError('⚖️ Enter your starting weight, shinobi — the crystal ball needs a number!'); return; }
+    if (!(tIn > 0)) { showEnrollError('🎯 Enter your target goal weight, shinobi!'); return; }
 
     let newStartKg, newGoalKg;
     if (currentUnit === 'imperial') {
-      newStartKg = wInput / 2.20462;
-      newGoalKg = tInput / 2.20462;
+      newStartKg = wIn / 2.20462;
+      newGoalKg = tIn / 2.20462;
     } else {
-      newStartKg = wInput;
-      newGoalKg = tInput;
+      newStartKg = wIn;
+      newGoalKg = tIn;
     }
 
     if (newGoalKg >= newStartKg) {
-      document.getElementById('prophecyBox').innerHTML = `
-        🔮 <strong>Iruka's Prophecy:</strong> Your target weight must be below your current weight, shinobi!`;
+      showEnrollError(`🔮 Iruka's Prophecy: Your target weight must be below your current weight, shinobi!`);
       return;
     }
 
@@ -1709,9 +1793,9 @@
     // START + TARGET DATE — validated FIRST, before anything is archived or
     // reset, so a rejected enrollment changes nothing at all.
     let pickedStart = (document.getElementById('calcStartDate') || {}).value || '';
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(pickedStart)) pickedStart = startDateStr || '2026-09-01';
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(pickedStart)) { showEnrollError('📅 Pick your start date, shinobi — every legend has a day one!'); return; }
     let pickedDate = (document.getElementById('calcTargetDate') || {}).value || '';
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(pickedDate)) pickedDate = isoPlusDays(pickedStart, 91);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(pickedDate)) { showEnrollError('🎯 Pick your target date (deadline), shinobi!'); return; }
     if (pickedStart >= pickedDate) {
       showEnrollError('📅 The start date must come before the target date, shinobi! Pick a deadline after your start day.');
       return;
@@ -1723,14 +1807,18 @@
     finalGoalWeightKg = newGoalKg;
 
     if (currentUnit === 'imperial') {
-      let ft = parseFloat(document.getElementById('calcHeightFt').value) || 5;
-      let inches = parseFloat(document.getElementById('calcHeightIn').value) || 10;
+      const ft = parseFloat(document.getElementById('calcHeightFt').value) || 0;
+      const inches = parseFloat(document.getElementById('calcHeightIn').value) || 0;
+      if (!((ft * 12 + inches) > 0)) { showEnrollError('📏 Enter your height, shinobi!'); return; }
       heightCm = ((ft * 12) + inches) * 2.54;
     } else {
-      heightCm = parseFloat(document.getElementById('calcHeightCm').value) || 178;
+      const hcm = parseFloat(document.getElementById('calcHeightCm').value);
+      if (!(hcm > 0)) { showEnrollError('📏 Enter your height, shinobi!'); return; }
+      heightCm = hcm;
     }
 
-    const a = parseInt(document.getElementById('calcAge').value) || 32;
+    const a = parseInt(document.getElementById('calcAge').value);
+    if (!(a > 0)) { showEnrollError('🎂 Enter your age, shinobi!'); return; }
     const sex = document.getElementById('calcSex').value;
     const act = parseFloat(document.getElementById('calcActivity').value) || 1.55;
 
