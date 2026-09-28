@@ -1,0 +1,29 @@
+{
+  "background_color": "#0b0c10",
+  "description": "Naruto-style weight-loss tracker \u2014 weekly battles, jutsu scrolls, boss fights, rival dojo.",
+  "display": "standalone",
+  "icons": [
+    {
+      "sizes": "192x192",
+      "src": "icon-192.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "512x512",
+      "src": "icon-512.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "icon-maskable-512.png",
+      "type": "image/png"
+    }
+  ],
+  "name": "Weight Tracker: Shinobi Shred",
+  "orientation": "portrait",
+  "scope": ".",
+  "short_name": "Shinobi Shred",
+  "start_url": ".",
+  "theme_color": "#0b0c10"
+}
