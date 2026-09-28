@@ -2,7 +2,7 @@
 // IMPORTANT: bump CACHE on every release (match the footer version tag).
 // If this file is byte-identical between releases, phones keep serving the
 // old cached index.html and the update never arrives.
-const CACHE = 'shinobi-shred-v2026.09.28-r7';
+const CACHE = 'shinobi-shred-v2026.09.28-r9';
 const ASSETS = [
   './',
   './index.html',
