@@ -126,15 +126,7 @@
     18% { opacity:.9; }
     100% { transform:translateY(-44px) translateX(9px); opacity:0; } }
 
-  /* TITLE MASCOT — always-alive mini chibi beside the title, gentle float + flame flicker */
-  .title-mascot { display:inline-block; vertical-align:middle; margin-left:8px; position:relative; }
-  .title-mascot::before { content:''; position:absolute; inset:-10px; border-radius:50%;
-    background:radial-gradient(circle, rgba(255,150,50,.45), transparent 70%);
-    animation:mascot-flame 2.2s ease-in-out infinite; pointer-events:none; }
-  @keyframes mascot-flame { 0%,100% { opacity:.5; transform:scale(1); } 50% { opacity:.85; transform:scale(1.14); } }
-  .mascot-img { width:46px; height:46px; border-radius:24%; vertical-align:middle;
-    box-shadow:0 0 14px rgba(255,150,50,.45); animation:mascot-float 3.6s ease-in-out infinite; }
-  @keyframes mascot-float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-4px); } }
+  /* TITLE MASCOT — always-alive mini chibi beside the title, gentle float + flame flicker */ 50% { opacity:.85; transform:scale(1.14); } } 50% { transform:translateY(-4px); } }
   .header .chibi-sm { scale:.8; margin:-7px -6px; filter:drop-shadow(0 0 12px rgba(255,180,80,.6)); }
   body.sage .header { background:
       radial-gradient(130% 100% at 88% 0%, rgba(255,140,40,.30), transparent 55%),
@@ -390,7 +382,7 @@
   @keyframes boss-hit { 0% { filter: brightness(2.4) saturate(0.3); transform: translateX(0); } 20% { transform: translateX(-8px); } 45% { transform: translateX(6px); } 70% { transform: translateX(-3px); } 100% { filter: none; transform: translateX(0); } }
   .chibi-sm { scale: 0.6; margin: -14px -12px; vertical-align: middle; display: inline-block; }
   .manga-avatar.chibi-holder { background: transparent; border: none; animation: none; width: 64px; height: 74px; }
-  @media (prefers-reduced-motion: reduce) { .chibi, .chibi::after, .boss-chibi .chibi, .boss-chibi.boss-hit, .arena-card::before, .arena-card::after, .tile-pop, .shuriken, .hfx, .wind-streak, .chakra-fill.chakra-surge, .chakra-fill.chakra-surge::after, .saiyan-aura::before, .saiyan-aura::after, .saiyan-aura.aura-burst, .milestone-target, .target-embers i, .title-mascot::before, .mascot-img, .app-icon-img { animation: none; } #enrollFx { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .chibi, .chibi::after, .boss-chibi .chibi, .boss-chibi.boss-hit, .arena-card::before, .arena-card::after, .tile-pop, .shuriken, .hfx, .wind-streak, .chakra-fill.chakra-surge, .chakra-fill.chakra-surge::after, .saiyan-aura::before, .saiyan-aura::after, .saiyan-aura.aura-burst, .milestone-target, .target-embers i, .app-icon-img { animation: none; } #enrollFx { display: none; } }
   /* Mobile scroll smoothness: single page scroller (no nested scroll traps),
      momentum scrolling, and cheaper off-screen paint on phones. */
   html, body { -webkit-overflow-scrolling: touch; touch-action: pan-y; }
@@ -934,7 +926,7 @@
 <div class="dashboard">
   <!-- Header -->
   <div class="header">
-    <h2 class="display-font"><span class="brand-cluster"><span class="konoha-leaf"><svg class="shuriken" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="shSteel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7fafc"/><stop offset=".45" stop-color="#aeb8c4"/><stop offset="1" stop-color="#78818d"/></linearGradient><mask id="shHole"><rect width="100" height="100" fill="#fff"/><circle cx="50" cy="50" r="11" fill="#000"/></mask></defs><g mask="url(#shHole)" fill="url(#shSteel)" stroke="#454e59" stroke-width="3"><path d="M50 50 C45 34 44 22 50 8 C56 22 55 34 50 50 Z"/><path d="M50 50 C66 45 78 44 92 50 C78 56 66 55 50 50 Z"/><path d="M50 50 C55 66 56 78 50 92 C44 78 45 66 50 50 Z"/><path d="M50 50 C34 55 22 56 8 50 C22 44 34 45 50 50 Z"/><circle cx="50" cy="20" r="4.5" fill="#ffffff" opacity="0.85" stroke="none"/></g></svg></span><img class="app-icon-img" src="icon-192.png" alt="" aria-hidden="true"></span> <span class="title-fire">Shinobi Shred</span><span class="title-mascot" aria-hidden="true"><img class="mascot-img" alt="" src="data:image/webp;base64,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"></span></h2>
+    <h2 class="display-font"><span class="brand-cluster"><span class="konoha-leaf"><svg class="shuriken" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="shSteel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7fafc"/><stop offset=".45" stop-color="#aeb8c4"/><stop offset="1" stop-color="#78818d"/></linearGradient><mask id="shHole"><rect width="100" height="100" fill="#fff"/><circle cx="50" cy="50" r="11" fill="#000"/></mask></defs><g mask="url(#shHole)" fill="url(#shSteel)" stroke="#454e59" stroke-width="3"><path d="M50 50 C45 34 44 22 50 8 C56 22 55 34 50 50 Z"/><path d="M50 50 C66 45 78 44 92 50 C78 56 66 55 50 50 Z"/><path d="M50 50 C55 66 56 78 50 92 C44 78 45 66 50 50 Z"/><path d="M50 50 C34 55 22 56 8 50 C22 44 34 45 50 50 Z"/><circle cx="50" cy="20" r="4.5" fill="#ffffff" opacity="0.85" stroke="none"/></g></svg></span><img class="app-icon-img" src="icon-192.png" alt="" aria-hidden="true"></span> <span class="title-fire">Shinobi Shred</span></h2>
     <span class="hfx p1 fx-leaf" aria-hidden="true"></span>
     <span class="hfx p2 fx-leaf" aria-hidden="true"></span>
     <span class="hfx p3 fx-leaf" aria-hidden="true"></span>
@@ -964,11 +956,7 @@
     <div class="today-status" id="todayStatus"></div>
   </div>
 
-  <!-- NEW (project lead): ninja way motto -->
-  <div class="nindo-banner" id="nindoBanner" style="display: none;">
-    <span class="nindo-label">My Ninja Way</span>
-    <span class="nindo-text" id="nindoText"></span>
-  </div>
+  >
 
   <!-- LEAD DEV: weigh-in due banner -->
   <div class="due-banner" id="dueBanner">🥷 This week's weigh-in is due — the village awaits your report!
@@ -1029,7 +1017,17 @@
     <div class="section-title">📉 Weekly Battle Plan</div>
     <div class="battle-plan-text" id="battlePlanText">Your per-week marching orders will appear here.</div>
     <button class="ghost-btn" onclick="openDateAdjust()" style="margin-top:8px;">📅 Adjust dates</button>
-  </div>
+  </div
+    <!-- Manga Dialogue Panel -->
+  <div class="manga-panel sensei-card" id="coachBanner">
+    <div class="tile-pop pop-sensei" aria-hidden="true"></div>
+    <div class="manga-avatar chibi-holder" id="chibiAvatar"><div class="chibi chibi-naruto"><div class="ch-hair"></div><div class="ch-head"><div class="ch-band"><i>🍃</i></div><div class="ch-eye l"></div><div class="ch-eye r"></div><div class="ch-blush l"></div><div class="ch-blush r"></div><div class="ch-mouth"></div><div class="ch-brow l"></div><div class="ch-brow r"></div></div><div class="ch-body"></div></div></div>
+    <div class="manga-content">
+      <div class="manga-speaker" id="coachName">Naruto Uzumaki</div>
+      <div class="manga-dialogue" id="coachText">Believe it! Your Academy protocol is locked in. Let's become Hokage!</div>
+    </div>
+  </div
+>
 
   <!-- Battle Arena (replaces the weight graph) -->
   <div class="card arena-card">
@@ -1075,15 +1073,7 @@
     <div class="jutsu-count" id="jutsuCount"></div>
   </div>
 
-  <!-- Manga Dialogue Panel -->
-  <div class="manga-panel sensei-card" id="coachBanner">
-    <div class="tile-pop pop-sensei" aria-hidden="true"></div>
-    <div class="manga-avatar chibi-holder" id="chibiAvatar"><div class="chibi chibi-naruto"><div class="ch-hair"></div><div class="ch-head"><div class="ch-band"><i>🍃</i></div><div class="ch-eye l"></div><div class="ch-eye r"></div><div class="ch-blush l"></div><div class="ch-blush r"></div><div class="ch-mouth"></div><div class="ch-brow l"></div><div class="ch-brow r"></div></div><div class="ch-body"></div></div></div>
-    <div class="manga-content">
-      <div class="manga-speaker" id="coachName">Naruto Uzumaki</div>
-      <div class="manga-dialogue" id="coachText">Believe it! Your Academy protocol is locked in. Let's become Hokage!</div>
-    </div>
-  </div>
+  >
 
   <!-- NEW: Daily Special Mission -->
   <div class="mission-card">
@@ -1156,9 +1146,15 @@
       <button class="ghost-btn" onclick="addRival()">➕ Add rival</button>
     </div>
     <div id="dojoBoard"></div>
-  </div>
+  </div
+    <!-- NEW (project lead): ninja way motto -->
+  <div class="nindo-banner" id="nindoBanner" style="display: none;">
+    <span class="nindo-label">My Ninja Way</span>
+    <span class="nindo-text" id="nindoText"></span>
+  </div
+>
 
-  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r19 · Crafted by Adithya 🍥</div>
+  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r20 · Crafted by Adithya 🍥</div>
 </div>
 
 <script>
