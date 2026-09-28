@@ -367,6 +367,9 @@
   .dojo-add-row { display: flex; gap: 8px; margin: 4px 0 12px; }
   .dojo-input { flex: 1; min-width: 0; background: #0b0c10; border: 1px solid var(--scroll-border); border-radius: 10px; padding: 8px 12px; color: var(--text-bright); font-size: 12px; font-family: monospace; }
   body.sage .dojo-input { background: var(--surface-hover); }
+  /* ghost-btn is full-width by design — inside dojo flex rows it must size naturally
+     or it crushes the input (r5 fix: input rendered as a black pill on phones) */
+  .dojo-add-row .ghost-btn, .dojo-btns .ghost-btn { width: auto; margin-top: 0; flex-shrink: 0; white-space: nowrap; }
   .dojo-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 12px; margin-bottom: 6px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); }
   .dojo-you { border-color: var(--naruto-orange); background: rgba(255,107,0,0.07); }
   .dojo-rank { font-size: 15px; width: 28px; text-align: center; flex-shrink: 0; font-weight: 900; color: var(--text-muted); }
@@ -444,21 +447,6 @@
   .rankup-title { font-size: 52px; color: var(--naruto-orange); margin: 8px 0 4px; text-shadow: 0 0 20px rgba(255,107,0,0.5); }
   .rankup-sub { font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 20px; line-height: 1.5; }
 </style>
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#0b0c10">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Shinobi Shred">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <link rel="icon" type="image/png" href="icon-192.png">
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () {
-        navigator.serviceWorker.register('sw.js').catch(function () {});
-      });
-    }
-  </script>
 </head>
 <body>
 
@@ -852,7 +840,7 @@
 
   <button class="save-btn" id="saveBtn" onclick="saveProgress()">📜 File Mission Report</button>
   <input type="file" id="importFile" accept=".json,application/json" class="file-hidden" onchange="importBackup(this)">
-  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r4 · Crafted by Adithya 🍥</div>
+  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r5 · Crafted by Adithya 🍥</div>
 </div>
 
 <script>
