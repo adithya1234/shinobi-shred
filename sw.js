@@ -2,7 +2,7 @@
 // IMPORTANT: bump CACHE on every release (match the footer version tag).
 // If this file is byte-identical between releases, phones keep serving the
 // old cached index.html and the update never arrives.
-const CACHE = 'shinobi-shred-v2026.09.28-r20';
+const CACHE = 'shinobi-shred-v2026.09.28-r21';
 const ASSETS = [
   './',
   './index.html',
@@ -14,7 +14,12 @@ const ASSETS = [
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      // NOTE: {cache:'reload'} bypasses the HTTP cache. Without it, addAll can
+      // store a stale index.html (fetched from HTTP cache) under the NEW cache
+      // name — a poisoned version cache that serves the old release forever.
+      .then((c) => c.addAll(ASSETS.map((u) => new Request(u, { cache: 'reload' }))))
+      .then(() => self.skipWaiting())
   );
 });
 

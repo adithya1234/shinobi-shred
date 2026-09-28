@@ -728,7 +728,17 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('sw.js').catch(function () {});
+        navigator.serviceWorker.register('sw.js').then(function (reg) {
+          // Check for a new release on every launch, not just on navigation.
+          try { reg.update(); } catch (e) {}
+          // When a new version takes over, show it right away. Never reload a
+          // first install — only an update from a previously controlling worker.
+          var hadController = !!navigator.serviceWorker.controller;
+          var reloaded = false;
+          navigator.serviceWorker.addEventListener('controllerchange', function () {
+            if (hadController && !reloaded) { reloaded = true; window.location.reload(); }
+          });
+        }).catch(function () {});
       });
     }
   </script>
@@ -1154,7 +1164,7 @@
   </div
 >
 
-  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r20 · Crafted by Adithya 🍥</div>
+  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r21 · Crafted by Adithya 🍥</div>
 </div>
 
 <script>
