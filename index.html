@@ -475,12 +475,7 @@
   /* LEAD DEV: weigh-in due banner */
   .due-banner { display: none; margin: 12px 0 0; padding: 12px; border-radius: 14px; background: linear-gradient(135deg, rgba(255,107,0,0.16), rgba(255,158,0,0.08)); border: 1px solid var(--naruto-orange); text-align: center; font-size: 13px; font-weight: 700; color: var(--text-bright); }
   .due-banner button { margin-top: 8px; }
-  /* LEAD DEV: past tours archive */
-  .archive-box { margin-top: 10px; border: 1px dashed var(--scroll-border); border-radius: 14px; padding: 10px 12px; font-size: 12px; color: var(--text-muted); }
-  .archive-box summary { cursor: pointer; font-weight: 800; color: var(--text-bright); font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-  .archive-item { padding: 8px 0; border-top: 1px solid rgba(255,255,255,0.06); line-height: 1.5; }
-  .archive-item strong { color: var(--text-bright); }
-  @keyframes threat-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(200,40,40,0); } 50% { box-shadow: 0 0 18px rgba(200,40,40,0.45); } }
+@keyframes threat-pulse { 0%, 100% { box-shadow: 0 0 0 rgba(200,40,40,0); } 50% { box-shadow: 0 0 18px rgba(200,40,40,0.45); } }
 
   /* NEW (project lead): ninja way motto banner */
   .nindo-banner { text-align: center; margin: -6px 0 16px; animation: fadeInUp 0.5s ease-out 0.05s both; }
@@ -963,6 +958,111 @@
     <span class="nindo-text" id="nindoText"></span>
   </div>
 
+  <!-- LEAD DEV: weigh-in due banner -->
+  <div class="due-banner" id="dueBanner">🥷 This week's weigh-in is due — the village awaits your report!
+    <br><button class="ghost-btn" style="margin-top:8px;" onclick="logToday()">⚖️ Log it now</button>
+  </div>
+  <!-- Table List -->
+  <div class="list-container" id="listContainer"></div>
+  <button class="save-btn" id="saveBtn" onclick="saveProgress()">📜 File Mission Report</button>
+  <input type="file" id="importFile" accept=".json,application/json" class="file-hidden" onchange="importBackup(this)">
+
+  <!-- Milestone Card -->
+  <div class="card">
+    <div class="milestone-header">
+      <div>
+        <div class="milestone-title" id="msTitle">Milestone 1</div>
+        <div class="milestone-value display-font" id="msCurrent">-- kg</div>
+      </div>
+      <div style="text-align: right;" class="target-wrap">
+        <div class="milestone-title">Target</div>
+        <div class="milestone-target" id="msTarget">-- kg</div>
+        <span class="target-embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
+    </div>
+    <div class="progress-bg">
+      <div class="progress-fill" id="fillBar"></div>
+    </div>
+    <div class="lore-grid">
+      <div class="lore-item"><span class="lore-label">Current Arc</span><span id="arcLine">⚔️ Academy Days</span></div>
+      <div class="lore-item"><span class="lore-label">Jutsu Unlocked</span><span id="jutsuLine">👥 Shadow Clone Jutsu</span><span class="seal-line" id="sealLine"></span></div>
+    </div>
+    <div class="boss-line" id="bossLine">👹 Next Boss: 🎋 Mizuki</div>
+    <div class="bounty-line" id="bountyLine"></div>
+    <div class="threat-banner threat-guarded" id="threatBanner"></div>
+  </div>
+  <!-- NEW: Stats grid -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">🔥 Chakra Burned</div>
+      <div class="stat-value accent" id="statLost">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">👑 Road to Hokage</div>
+      <div class="stat-value" id="statPct">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">📅 Coronation ETA</div>
+      <div class="stat-value" id="statDate">--</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">🩺 BMI</div>
+      <div class="stat-value" id="statBmi">--</div>
+    </div>
+  </div>
+
+  <!-- TARGET DATE: generated text — how much to reduce each week -->
+  <div class="card plan-card">
+    <div class="tile-pop pop-plan" aria-hidden="true"></div>
+    <div class="section-title">📉 Weekly Battle Plan</div>
+    <div class="battle-plan-text" id="battlePlanText">Your per-week marching orders will appear here.</div>
+    <button class="ghost-btn" onclick="openDateAdjust()" style="margin-top:8px;">📅 Adjust dates</button>
+  </div>
+
+  <!-- Battle Arena (replaces the weight graph) -->
+  <div class="card arena-card">
+    <div class="arena-head">
+      <div class="section-title">🏟️ Battle Arena</div>
+      <div class="arena-tagline">Every week you beat your target, the boss takes damage</div>
+    </div>
+    <div class="arena-fight">
+      <div class="fighter">
+        <div class="saiyan-aura" id="saiyanAura" aria-hidden="true"></div><span id="arenaChibi"><div class="chibi chibi-naruto"><div class="ch-hair"></div><div class="ch-head"><div class="ch-band"><i>🍃</i></div><div class="ch-eye l"></div><div class="ch-eye r"></div><div class="ch-blush l"></div><div class="ch-blush r"></div><div class="ch-mouth"></div><div class="ch-brow l"></div><div class="ch-brow r"></div></div><div class="ch-body"></div></div></span>
+        <div class="fighter-name" id="arenaFighterName">YOU</div>
+        <div class="hp-bar"><div class="hp-fill hp-you" id="youHpBar" style="width:0%"></div></div>
+        <div class="hp-num" id="youHpLabel">--</div>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="fighter">
+        <div class="boss-face" id="arenaBossEmoji">🎋</div>
+        <div class="fighter-name" id="arenaBossName">Mizuki</div>
+        <div class="hp-bar"><div class="hp-fill hp-boss" id="bossHpBar" style="width:100%"></div></div>
+        <div class="hp-num" id="bossHpLabel">--</div>
+      </div>
+    </div>
+    <div class="chakra-row">
+      <div class="chakra-head"><span class="chakra-name">⚡ Chakra</span><span class="chakra-num" id="chakraLabel">--</span></div>
+      <div class="chakra-bar"><div class="chakra-fill" id="chakraBar" style="width:0%"></div></div>
+    </div>
+    <div class="arena-stats">
+      <div class="arena-stat"><div class="a-num" id="arenaWon">0</div><div class="a-label">Battles Won</div></div>
+      <div class="arena-stat"><div class="a-num" id="arenaRate">--</div><div class="a-label">Win Rate</div></div>
+      <div class="arena-stat"><div class="a-num" id="arenaBest">--</div><div class="a-label">Best Blow</div></div>
+      <div class="arena-stat"><div class="a-num" id="arenaKo">0</div><div class="a-label">Bosses KO'd</div></div>
+    </div>
+    <div class="arena-taunt" id="arenaTaunt"></div>
+  </div>
+
+  <!-- LEAD DEV: Jutsu Scroll Collection — one scroll per program week, from start date to target date -->
+  <div class="card jutsu-card">
+    <div class="tile-pop pop-jutsu" aria-hidden="true"></div>
+    <div class="section-title">📜 Jutsu Scroll Collection</div>
+    <div class="arena-tagline">One scroll per week — hit your weekly target to unseal it</div>
+    <div class="jutsu-range" id="jutsuRange"></div>
+    <div class="jutsu-grid" id="jutsuGrid"></div>
+    <div class="jutsu-count" id="jutsuCount"></div>
+  </div>
+
   <!-- Manga Dialogue Panel -->
   <div class="manga-panel sensei-card" id="coachBanner">
     <div class="tile-pop pop-sensei" aria-hidden="true"></div>
@@ -981,7 +1081,6 @@
       <div class="mission-text" id="missionText">Complete all 4 ANBU missions to extend your streak!</div>
     </div>
   </div>
-
   <!-- ANBU Mission Board -->
   <div class="card anbu-card" style="padding: 16px 20px;">
     <div class="milestone-header" style="margin-bottom: 4px;">
@@ -1025,85 +1124,6 @@
     <div class="mission-complete-banner" id="missionBanner" style="display: none;">⚔️ Mission Complete ⚔️</div>
   </div>
 
-  <!-- Milestone Card -->
-  <div class="card">
-    <div class="milestone-header">
-      <div>
-        <div class="milestone-title" id="msTitle">Milestone 1</div>
-        <div class="milestone-value display-font" id="msCurrent">-- kg</div>
-      </div>
-      <div style="text-align: right;" class="target-wrap">
-        <div class="milestone-title">Target</div>
-        <div class="milestone-target" id="msTarget">-- kg</div>
-        <span class="target-embers" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span>
-      </div>
-    </div>
-    <div class="progress-bg">
-      <div class="progress-fill" id="fillBar"></div>
-    </div>
-    <div class="lore-grid">
-      <div class="lore-item"><span class="lore-label">Current Arc</span><span id="arcLine">⚔️ Academy Days</span></div>
-      <div class="lore-item"><span class="lore-label">Jutsu Unlocked</span><span id="jutsuLine">👥 Shadow Clone Jutsu</span><span class="seal-line" id="sealLine"></span></div>
-    </div>
-    <div class="boss-line" id="bossLine">👹 Next Boss: 🎋 Mizuki</div>
-    <div class="bounty-line" id="bountyLine"></div>
-    <div class="threat-banner threat-guarded" id="threatBanner"></div>
-  </div>
-
-  <!-- NEW: Stats grid -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">🔥 Chakra Burned</div>
-      <div class="stat-value accent" id="statLost">--</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">👑 Road to Hokage</div>
-      <div class="stat-value" id="statPct">--</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">📅 Coronation ETA</div>
-      <div class="stat-value" id="statDate">--</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">🩺 BMI</div>
-      <div class="stat-value" id="statBmi">--</div>
-    </div>
-  </div>
-
-  <!-- Battle Arena (replaces the weight graph) -->
-  <div class="card arena-card">
-    <div class="arena-head">
-      <div class="section-title">🏟️ Battle Arena</div>
-      <div class="arena-tagline">Every week you beat your target, the boss takes damage</div>
-    </div>
-    <div class="arena-fight">
-      <div class="fighter">
-        <div class="saiyan-aura" id="saiyanAura" aria-hidden="true"></div><span id="arenaChibi"><div class="chibi chibi-naruto"><div class="ch-hair"></div><div class="ch-head"><div class="ch-band"><i>🍃</i></div><div class="ch-eye l"></div><div class="ch-eye r"></div><div class="ch-blush l"></div><div class="ch-blush r"></div><div class="ch-mouth"></div><div class="ch-brow l"></div><div class="ch-brow r"></div></div><div class="ch-body"></div></div></span>
-        <div class="fighter-name" id="arenaFighterName">YOU</div>
-        <div class="hp-bar"><div class="hp-fill hp-you" id="youHpBar" style="width:0%"></div></div>
-        <div class="hp-num" id="youHpLabel">--</div>
-      </div>
-      <div class="vs-badge">VS</div>
-      <div class="fighter">
-        <div class="boss-face" id="arenaBossEmoji">🎋</div>
-        <div class="fighter-name" id="arenaBossName">Mizuki</div>
-        <div class="hp-bar"><div class="hp-fill hp-boss" id="bossHpBar" style="width:100%"></div></div>
-        <div class="hp-num" id="bossHpLabel">--</div>
-      </div>
-    </div>
-    <div class="chakra-row">
-      <div class="chakra-head"><span class="chakra-name">⚡ Chakra</span><span class="chakra-num" id="chakraLabel">--</span></div>
-      <div class="chakra-bar"><div class="chakra-fill" id="chakraBar" style="width:0%"></div></div>
-    </div>
-    <div class="arena-stats">
-      <div class="arena-stat"><div class="a-num" id="arenaWon">0</div><div class="a-label">Battles Won</div></div>
-      <div class="arena-stat"><div class="a-num" id="arenaRate">--</div><div class="a-label">Win Rate</div></div>
-      <div class="arena-stat"><div class="a-num" id="arenaBest">--</div><div class="a-label">Best Blow</div></div>
-      <div class="arena-stat"><div class="a-num" id="arenaKo">0</div><div class="a-label">Bosses KO'd</div></div>
-    </div>
-    <div class="arena-taunt" id="arenaTaunt"></div>
-  </div>
-
   <!-- RIVAL DOJO: share challenge codes, compete with friends -->
   <div class="card dojo-card">
     <div class="tile-pop pop-dojo" aria-hidden="true"></div>
@@ -1126,36 +1146,7 @@
     <div id="dojoBoard"></div>
   </div>
 
-  <!-- TARGET DATE: generated text — how much to reduce each week -->
-  <div class="card plan-card">
-    <div class="tile-pop pop-plan" aria-hidden="true"></div>
-    <div class="section-title">📉 Weekly Battle Plan</div>
-    <div class="battle-plan-text" id="battlePlanText">Your per-week marching orders will appear here.</div>
-    <button class="ghost-btn" onclick="openDateAdjust()" style="margin-top:8px;">📅 Adjust dates</button>
-  </div>
-
-  <!-- LEAD DEV: Jutsu Scroll Collection — one scroll per program week, from start date to target date -->
-  <div class="card jutsu-card">
-    <div class="tile-pop pop-jutsu" aria-hidden="true"></div>
-    <div class="section-title">📜 Jutsu Scroll Collection</div>
-    <div class="arena-tagline">One scroll per week — hit your weekly target to unseal it</div>
-    <div class="jutsu-range" id="jutsuRange"></div>
-    <div class="jutsu-grid" id="jutsuGrid"></div>
-    <div class="jutsu-count" id="jutsuCount"></div>
-  </div>
-
-  <!-- LEAD DEV: weigh-in due banner -->
-  <div class="due-banner" id="dueBanner">🥷 This week's weigh-in is due — the village awaits your report!
-    <br><button class="ghost-btn" style="margin-top:8px;" onclick="logToday()">⚖️ Log it now</button>
-  </div>
-
-  <!-- Table List -->
-  <div class="list-container" id="listContainer"></div>
-
-  
-  <button class="save-btn" id="saveBtn" onclick="saveProgress()">📜 File Mission Report</button>
-  <input type="file" id="importFile" accept=".json,application/json" class="file-hidden" onchange="importBackup(this)">
-  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r17 · Crafted by Adithya 🍥</div>
+  <div class="version-tag">🔥 Shinobi Shred · v2026.09.28-r18 · Crafted by Adithya 🍥</div>
 </div>
 
 <script>
@@ -1186,9 +1177,6 @@
   function pGet(k) { return localStorage.getItem(pk(k)); }
   function pSet(k, v) { localStorage.setItem(pk(k), v); }
   function pDel(k) { localStorage.removeItem(pk(k)); }
-  // BLANK-FIRST ENROLLMENT: true once this profile has sealed a program.
-  // Fresh shinobi see blank inputs; re-enrolling shinobi get their own stats back.
-  function hasProgram() { try { return !!pGet('shinobi_config'); } catch (e) { return false; } }
 
   const SHINOBI_ROSTER = [
     { id: 'naruto',     name: 'Naruto',         village: '🍃 Leaf',      accent: '#ff6b00', symbol: '🍃' },
