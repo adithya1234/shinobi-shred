@@ -1,5 +1,8 @@
 // Shinobi Shred — offline service worker (cache-first, then network)
-const CACHE = 'shinobi-shred-v1';
+// IMPORTANT: bump CACHE on every release (match the footer version tag).
+// If this file is byte-identical between releases, phones keep serving the
+// old cached index.html and the update never arrives.
+const CACHE = 'shinobi-shred-v2026.09.28-r7';
 const ASSETS = [
   './',
   './index.html',
